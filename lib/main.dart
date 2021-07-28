@@ -1,7 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:login_with_auth/Authentication/auth.dart';
-import 'package:login_with_auth/Authentication/login_page.dart';
+import 'package:provider/provider.dart';
+
+import 'Screens/auth.dart';
 
 void main() {
   runApp(MyApp());
@@ -18,9 +19,12 @@ class MyApp extends StatelessWidget {
         if (snapshot.hasError) {
           return ErrorWidget();
         } else if (snapshot.hasData) {
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            home: Authentication(),
+          return MultiProvider(
+            providers: [],
+            child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              home: Authentication(),
+            ),
           );
         } else {
           return Loading();

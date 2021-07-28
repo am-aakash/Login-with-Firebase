@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:login_with_auth/Services/authentication/auth_services.dart';
+import 'package:provider/provider.dart';
 
-class LoginPage extends StatefulWidget {
+class SignupPage extends StatefulWidget {
   final Function toggleScreen;
 
-  const LoginPage({Key? key, required this.toggleScreen}) : super(key: key);
+  const SignupPage({Key? key, required this.toggleScreen}) : super(key: key);
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _SignupPageState createState() => _SignupPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignupPageState extends State<SignupPage> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   final _formkey = GlobalKey<FormState>();
@@ -29,6 +31,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final loginProvider = Provider.of<AuthServices>(context);
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -49,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              "Login",
+                              "Register",
                               style: TextStyle(
                                 fontSize: 50,
                                 fontWeight: FontWeight.bold,
@@ -145,55 +148,43 @@ class _LoginPageState extends State<LoginPage> {
                           SizedBox(height: 30),
                           Container(
                             child: MaterialButton(
-                              minWidth: 150,
+                              minWidth: loginProvider.isLoading ? null : 150,
                               height: 60,
                               color: Colors.redAccent,
                               elevation: 7,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(50),
                               ),
-                              onPressed: () {
+                              onPressed: () async {
                                 if (_formkey.currentState!.validate()) {
                                   print("Email: ${_emailController.text}");
                                   print(
                                       "Password: ${_passwordController.text}");
+                                  await loginProvider.register(
+                                    _emailController.text.trim(),
+                                    _passwordController.text.trim(),
+                                  );
                                 }
-                                ;
                               },
-                              child: Text(
-                                "Login",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 20,
-                                  color: Colors.white,
-                                ),
-                              ),
+                              child: loginProvider.isLoading
+                                  ? CircularProgressIndicator()
+                                  : Text(
+                                      "Signup",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 20,
+                                        color: Colors.white,
+                                      ),
+                                    ),
                             ),
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
+                              Text("Already Have a account?"),
                               TextButton(
                                 child: Text(
-                                  "Forgot Password?",
-                                  style: TextStyle(
-                                    color: Colors.redAccent,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                                onPressed: () {},
-                              )
-                            ],
-                          ),
-                          //SizedBox(height: 80),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text("New to My App?"),
-                              TextButton(
-                                child: Text(
-                                  "SignUp",
+                                  "Login",
                                   style: TextStyle(
                                     color: Colors.redAccent,
                                     fontWeight: FontWeight.w600,
@@ -217,8 +208,3 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-
-// we will be creating a widget for text field
-// Widget inputFile({required label, obscureText = false, required ipController}) {
-//   return ;
-// }
