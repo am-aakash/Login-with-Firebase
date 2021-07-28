@@ -11,10 +11,28 @@ class AuthServices with ChangeNotifier {
   String get errorMessege => _errorMessege;
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
-  Future login(String email, String password) async {
+  Future register(String email, String password) async {
+    setLoading(true);
     try {
       UserCredential authResult = await firebaseAuth
           .createUserWithEmailAndPassword(email: email, password: password);
+      User? user = authResult.user;
+      setLoading(false);
+      return user;
+    } on SocketException {
+      setLoading(false);
+      setMessege("No internet, Please connect to internet");
+    } catch (e) {
+      setLoading(false);
+    }
+    notifyListeners();
+  }
+
+  Future login(String email, String password) async {
+    setLoading(true);
+    try {
+      UserCredential authResult = await firebaseAuth.signInWithEmailAndPassword(
+          email: email, password: password);
       User? user = authResult.user;
       setLoading(false);
       return user;
@@ -28,6 +46,10 @@ class AuthServices with ChangeNotifier {
     notifyListeners();
   }
 
+  Future logout() async {
+    await firebaseAuth.signOut();
+  }
+
   void setLoading(val) {
     _isLoading = val;
     notifyListeners();
@@ -37,4 +59,7 @@ class AuthServices with ChangeNotifier {
     _errorMessege = messege;
     notifyListeners();
   }
+
+  Stream<User?> get user =>
+      firebaseAuth.authStateChanges().map((event) => event);
 }

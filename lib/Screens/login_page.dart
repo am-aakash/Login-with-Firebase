@@ -161,8 +161,9 @@ class _LoginPageState extends State<LoginPage> {
                                   print(
                                       "Password: ${_passwordController.text}");
                                   await loginProvider.login(
-                                      _emailController.text.trim(),
-                                      _passwordController.text.trim());
+                                    _emailController.text.trim(),
+                                    _passwordController.text.trim(),
+                                  );
                                 }
                               },
                               child: loginProvider.isLoading

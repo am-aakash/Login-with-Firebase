@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:login_with_auth/Services/authentication/auth_services.dart';
 import 'package:provider/provider.dart';
 
 import 'Screens/auth.dart';
@@ -20,7 +22,11 @@ class MyApp extends StatelessWidget {
           return ErrorWidget();
         } else if (snapshot.hasData) {
           return MultiProvider(
-            providers: [],
+            providers: [
+              ChangeNotifierProvider<AuthServices>.value(value: AuthServices()),
+              StreamProvider<User?>.value(
+                  value: AuthServices().user, initialData: null)
+            ],
             child: MaterialApp(
               debugShowCheckedModeBanner: false,
               home: Authentication(),

@@ -195,6 +195,16 @@ class _SignupPageState extends State<SignupPage> {
                               )
                             ],
                           ),
+                          SizedBox(height: 20),
+                          // if (loginProvider.errorMessege != null)
+                          //   Container(
+                          //     padding: EdgeInsets.symmetric(
+                          //         horizontal: 10, vertical: 5),
+                          //     color: Colors.amberAccent,
+                          //     child: ListTile(
+                          //       title: Text(loginProvider.errorMessege),
+                          //     ),
+                          //   )
                         ],
                       ),
                     ),
